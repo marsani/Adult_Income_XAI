@@ -1,0 +1,12 @@
+streamlit
+pandas
+numpy
+scikit-learn
+shap
+lime
+matplotlib
+joblib
+requests
+openai
+google-generativeai
+importlib-metadata
