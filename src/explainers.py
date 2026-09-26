@@ -2,12 +2,22 @@ import shap
 import lime
 import lime.lime_tabular
 import joblib
+from pathlib import Path
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+# Path to the root directory (/mount/src/adult_income_xai)
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Point to your model file location (adjust subfolder and filename as needed)
+MODEL_PATH = BASE_DIR / "models" / "rf_model.joblib"
+
+# Load the model
+# rf_model = joblib.load(MODEL_PATH)
+
 # Load artifacts
-MODEL_PATH = 'models/rf_model.pkl'
+# MODEL_PATH = 'models/rf_model.pkl'
 X_TRAIN_SAMPLE_PATH = 'models/X_train_sample.pkl'
 FEATURE_NAMES_PATH = 'models/feature_names.pkl'
 
