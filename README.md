@@ -1,125 +1,126 @@
 # 📊 Adult Income Prediction & Explainability (XAI)
 
-Aplikasi web interaktif berbasis **Streamlit** untuk memprediksi apakah pendapatan seseorang melebihi **$50.000/tahun (>50K)** menggunakan **Random Forest Classifier**, dilengkapi dengan analisis **Explainable AI (XAI)** menggunakan **SHAP**, **LIME**, serta narasi penjelasan otomatis bertenaga **LLM (OpenAI / Google Gemini)**.
+An interactive web application built with **Streamlit** to predict whether an individual's income exceeds **$50,000/year (>50K)** using a **Random Forest Classifier**, equipped with comprehensive **Explainable AI (XAI)** analysis using **SHAP**, **LIME**, and automated natural language explanations powered by **LLMs (OpenAI ChatGPT / Google Gemini)**.
 
 ---
 
-## ✨ Fitur Utama
+## ✨ Key Features
 
-1. **Eksplorasi Data & Training Model**:
-   - Analisis performa model: Akurasi, Precision, Recall, F1-Score, Confusion Matrix, dan ROC-AUC Curve.
-   - Penyesuaian Hyperparameter (*n_estimators, max_depth, min_samples_split*).
-   - Opsi penanganan *imbalance data*: **SMOTE**, **Random Over-sampling**, **Class Weight (Balanced)**, atau **None**.
-2. **Prediksi Interaktif**:
-   - Input data personal (umur, jam kerja, pendidikan, pekerjaan, dll.) secara real-time.
-   - Menghasilkan probabilitas prediksi kelas `<=50K` atau `>50K`.
+1. **Exploratory Data Analysis & Model Training**:
+   - Model performance metrics: Accuracy, Precision, Recall, F1-Score, Confusion Matrix, and ROC-AUC Curve.
+   - Hyperparameter tuning (*n_estimators, max_depth, min_samples_split*).
+   - Class imbalance handling options: **SMOTE**, **Random Over-sampling**, **Class Weight (Balanced)**, or **None**.
+2. **Interactive Prediction**:
+   - Real-time input for individual demographic and employment features (age, workclass, education, hours per week, capital gain/loss, etc.).
+   - Prediction probabilities for `<=50K` and `>50K` classes.
 3. **Explainable AI (XAI)**:
-   - **SHAP (SHapley Additive exPlanations)**: Force Plot, Waterfall Plot, dan Summary Plot untuk kontribusi fitur.
-   - **LIME (Local Interpretable Model-Agnostic Explanations)**: Penjelasan lokal berbasis bobot fitur per instance.
-   - **Feature Importance**: Random Forest MDI & Permutation Importance.
+   - **SHAP (SHapley Additive exPlanations)**: Force plots, waterfall plots, and summary plots for feature contributions.
+   - **LIME (Local Interpretable Model-Agnostic Explanations)**: Local instance explanations highlighting positive/negative feature weights.
+   - **Feature Importance**: Random Forest Mean Decrease in Impurity (MDI) and Permutation Importance.
 4. **AI Narrative Explanations**:
-   - Menjelaskan hasil SHAP & LIME dalam bahasa yang mudah dipahami menggunakan OpenAI ChatGPT atau Google Gemini.
+   - Automatically interprets and explains complex SHAP & LIME results into clear, non-technical human language using OpenAI (GPT-3.5/GPT-4) or Google Gemini.
 
 ---
 
-## 📁 Struktur Proyek
+## 📁 Project Structure
 
 ```text
 adult_income_xai/
 │
-├── app.py                      # File utama aplikasi Streamlit
-├── requirements.txt            # Daftar dependensi Python
-├── .gitignore                  # File konfigurasi file yang diabaikan git
+├── app.py                      # Main Streamlit application
+├── requirements.txt            # Python dependencies
+├── .gitignore                  # Git ignore rules
+├── README.md                   # Project documentation
 │
 ├── .streamlit/
-│   └── config.toml             # Konfigurasi tampilan & tema Streamlit
+│   └── config.toml             # Streamlit theme & server configuration
 │
-├── models/                     # Model tersimpan dan metadata
+├── models/                     # Saved artifacts & metadata
 │   ├── rf_model.pkl            # Pre-trained Random Forest model
-│   ├── encoders.pkl            # Label Encoders untuk variabel kategori
-│   ├── feature_names.pkl       # Daftar nama fitur
-│   ├── X_train_sample.pkl      # Sampel data training untuk XAI
-│   └── metrics.json            # Metrik evaluasi model
+│   ├── encoders.pkl            # Label Encoders for categorical features
+│   ├── feature_names.pkl       # Feature names list
+│   ├── X_train_sample.pkl      # Training sample for XAI baseline
+│   └── metrics.json            # Model evaluation metrics
 │
-└── src/                        # Modul pendukung
-    ├── data_loader.py          # Script download & preprocessing dataset Adult UCI
-    ├── model_trainer.py        # Script training & evaluasi model
-    ├── explainers.py           # Inisialisasi explainer LIME & SHAP
-    └── llm_utils.py            # Integrasi LLM (OpenAI & Gemini)
+└── src/                        # Source modules
+    ├── data_loader.py          # Download & preprocess UCI Adult dataset
+    ├── model_trainer.py        # Model training, balancing & evaluation
+    ├── explainers.py           # SHAP & LIME explainer setup
+    └── llm_utils.py            # LLM API integration (OpenAI & Gemini)
 ```
 
 ---
 
-## 🚀 Panduan Menjalankan Secara Lokal
+## 🚀 Local Setup & Installation
 
-### 1. Clone Repository & Masuk ke Direktori
+### 1. Clone the Repository
 ```bash
-git clone https://github.com/<username-anda>/adult_income_xai.git
+git clone https://github.com/<your-username>/adult_income_xai.git
 cd adult_income_xai
 ```
 
-### 2. Buat Virtual Environment (Opsional tapi Direkomendasikan)
+### 2. Create and Activate Virtual Environment (Recommended)
 ```bash
-# Menggunakan venv
+# Create virtual environment
 python3 -m venv .venv
 
-# Aktivasi di macOS/Linux:
+# Activate on macOS/Linux:
 source .venv/bin/activate
 
-# Aktivasi di Windows (PowerShell/CMD):
+# Activate on Windows (Command Prompt / PowerShell):
 .venv\Scripts\activate
 ```
 
-### 3. Install Dependensi
+### 3. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Jalankan Aplikasi Streamlit
+### 4. Run the Streamlit Application
 ```bash
 streamlit run app.py
 ```
-Aplikasi akan terbuka otomatis di browser pada alamat `http://localhost:8501`.
+The application will automatically open in your default browser at `http://localhost:8501`.
 
 ---
 
-## 📤 Panduan Upload ke GitHub
+## 📤 Pushing to GitHub
 
-Jalankan perintah berikut di terminal pada direktori proyek:
+Run the following commands in your project terminal:
 
 ```bash
-# 1. Inisialisasi Git repository (jika belum)
+# 1. Initialize Git repository (if not already initialized)
 git init
 
-# 2. Tambahkan semua file
+# 2. Stage all files
 git add .
 
-# 3. Buat commit pertama
+# 3. Commit your changes
 git commit -m "Initial commit: Adult Income Prediction with XAI & Streamlit"
 
-# 4. Ubah nama branch utama ke main
+# 4. Set default branch to main
 git branch -M main
 
-# 5. Hubungkan ke repository GitHub Anda (buat repository kosong di github.com terlebih dahulu)
-git remote add origin https://github.com/<USERNAME_GITHUB>/<NAMA_REPO>.git
+# 5. Link to your GitHub repository (create an empty repository on github.com first)
+git remote add origin https://github.com/<YOUR_GITHUB_USERNAME>/<REPO_NAME>.git
 
-# 6. Push kode ke GitHub
+# 6. Push code to GitHub
 git push -u origin main
 ```
 
 ---
 
-## ☁️ Panduan Deploy ke Streamlit Community Cloud
+## ☁️ Deploying to Streamlit Community Cloud
 
-1. Buka [share.streamlit.io](https://share.streamlit.io) dan login menggunakan akun GitHub Anda.
-2. Klik tombol **"New app"**.
-3. Isi konfigurasi deployment:
-   - **Repository**: Pilih repository GitHub Anda (misal: `username/adult_income_xai`).
+1. Go to [share.streamlit.io](https://share.streamlit.io) and log in with your GitHub account.
+2. Click the **"New app"** button.
+3. Configure your deployment:
+   - **Repository**: Select your GitHub repository (e.g., `your-username/adult_income_xai`).
    - **Branch**: `main`
    - **Main file path**: `app.py`
-4. (Opsional) Jika menggunakan API Key OpenAI/Gemini di server, Anda dapat memasukkannya di menu **Advanced settings -> Secrets**.
-5. Klik **"Deploy!"**.
-6. Aplikasi Anda siap diakses secara publik dan dibagikan! 🎉
+4. *(Optional)* If you want to use OpenAI or Google Gemini API keys server-side, add them under **Advanced settings -> Secrets**.
+5. Click **"Deploy!"**.
+6. Your application is now live and publicly accessible! 🎉
 
 ---
 
@@ -135,5 +136,13 @@ git push -u origin main
 - `shap`
 - `lime`
 - `joblib`
+- `requests`
 - `openai`
 - `google-generativeai`
+- `importlib-metadata`
+
+---
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
