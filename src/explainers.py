@@ -1,26 +1,26 @@
+import os
 import shap
 import lime
 import lime.lime_tabular
 import joblib
-from pathlib import Path
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Path to the root directory (/mount/src/adult_income_xai)
-BASE_DIR = Path(__file__).resolve().parent.parent
+# Base paths
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MODELS_DIR = os.path.join(BASE_DIR, 'models')
+MODEL_PATH = os.path.join(MODELS_DIR, 'rf_model.pkl')
+X_TRAIN_SAMPLE_PATH = os.path.join(MODELS_DIR, 'X_train_sample.pkl')
+FEATURE_NAMES_PATH = os.path.join(MODELS_DIR, 'feature_names.pkl')
+ENCODERS_PATH = os.path.join(MODELS_DIR, 'encoders.pkl')
 
-# Point to your model file location (adjust subfolder and filename as needed)
-MODEL_PATH = BASE_DIR / "models" / "rf_model.joblib"
-
-# Load the model
-# rf_model = joblib.load(MODEL_PATH)
+# Auto-train if models directory or files are missing
+if not (os.path.exists(MODEL_PATH) and os.path.exists(X_TRAIN_SAMPLE_PATH) and os.path.exists(FEATURE_NAMES_PATH) and os.path.exists(ENCODERS_PATH)):
+    from src.model_trainer import train_model
+    train_model()
 
 # Load artifacts
-# MODEL_PATH = 'models/rf_model.pkl'
-X_TRAIN_SAMPLE_PATH = 'models/X_train_sample.pkl'
-FEATURE_NAMES_PATH = 'models/feature_names.pkl'
-
 rf_model = joblib.load(MODEL_PATH)
 X_train_sample = joblib.load(X_TRAIN_SAMPLE_PATH)
 feature_names = joblib.load(FEATURE_NAMES_PATH)

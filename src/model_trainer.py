@@ -7,6 +7,9 @@ from sklearn.metrics import classification_report, accuracy_score, confusion_mat
 from sklearn.inspection import permutation_importance
 import json
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MODELS_DIR = os.path.join(BASE_DIR, 'models')
+
 try:
     from src.data_loader import load_and_preprocess_data
 except ImportError:
@@ -20,7 +23,9 @@ def train_model(n_estimators=100, max_depth=None, min_samples_split=2, class_bal
     # Handle Class Imbalance
     if class_balancing == "SMOTE":
         try:
-            from imblearn.over_sampling import SMOTE
+            import importlib
+            imblearn_os = importlib.import_module("imblearn.over_sampling")
+            SMOTE = getattr(imblearn_os, "SMOTE")
             print("Applying SMOTE to balance the dataset...")
             smote = SMOTE(random_state=42)
             X_train_balanced, y_train_balanced = smote.fit_resample(X_train, y_train)
@@ -29,7 +34,7 @@ def train_model(n_estimators=100, max_depth=None, min_samples_split=2, class_bal
             
             rf = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth, min_samples_split=min_samples_split, random_state=42)
             rf.fit(X_train_balanced, y_train_balanced)
-        except ImportError:
+        except (ImportError, ModuleNotFoundError, AttributeError):
             print("imbalanced-learn not found. Falling back to class_weight='balanced'.")
             rf = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth, min_samples_split=min_samples_split, class_weight='balanced', random_state=42)
             rf.fit(X_train, y_train)
@@ -37,7 +42,9 @@ def train_model(n_estimators=100, max_depth=None, min_samples_split=2, class_bal
             
     elif class_balancing == "Random Over-sampling":
         try:
-            from imblearn.over_sampling import RandomOverSampler
+            import importlib
+            imblearn_os = importlib.import_module("imblearn.over_sampling")
+            RandomOverSampler = getattr(imblearn_os, "RandomOverSampler")
             print("Applying Random Over-sampling to balance the dataset...")
             ros = RandomOverSampler(random_state=42)
             X_train_balanced, y_train_balanced = ros.fit_resample(X_train, y_train)
@@ -46,7 +53,7 @@ def train_model(n_estimators=100, max_depth=None, min_samples_split=2, class_bal
             
             rf = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth, min_samples_split=min_samples_split, random_state=42)
             rf.fit(X_train_balanced, y_train_balanced)
-        except ImportError:
+        except (ImportError, ModuleNotFoundError, AttributeError):
             print("imbalanced-learn not found. Falling back to class_weight='balanced'.")
             rf = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth, min_samples_split=min_samples_split, class_weight='balanced', random_state=42)
             rf.fit(X_train, y_train)
@@ -105,17 +112,17 @@ def train_model(n_estimators=100, max_depth=None, min_samples_split=2, class_bal
     print("Classification Report:\n", classification_report(y_test, y_pred))
     
     # Save metrics
-    os.makedirs('models', exist_ok=True)
-    with open('models/metrics.json', 'w') as f:
+    os.makedirs(MODELS_DIR, exist_ok=True)
+    with open(os.path.join(MODELS_DIR, 'metrics.json'), 'w') as f:
         json.dump(metrics, f, indent=4)
         
     # Save model
-    model_path = 'models/rf_model.pkl'
-    joblib.dump(rf, model_path)
+    model_path = os.path.join(MODELS_DIR, 'rf_model.pkl')
+    joblib.dump(rf, model_path, compress=3)
     print(f"Model saved to {model_path}")
     
     # Save training data sample for LIME/SHAP initialization
-    joblib.dump(X_train.iloc[:100], 'models/X_train_sample.pkl')
+    joblib.dump(X_train.iloc[:100], os.path.join(MODELS_DIR, 'X_train_sample.pkl'))
     
     return rf, metrics
 

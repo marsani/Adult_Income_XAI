@@ -5,6 +5,9 @@ from sklearn.preprocessing import LabelEncoder
 import joblib
 import os
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MODELS_DIR = os.path.join(BASE_DIR, 'models')
+
 DATA_URL = "https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data"
 COLUMNS = [
     "age", "workclass", "fnlwgt", "education", "education-num", "marital-status",
@@ -33,11 +36,11 @@ def load_and_preprocess_data():
     y = df['income']
     
     # Save encoders for later use (decoding in UI)
-    os.makedirs('models', exist_ok=True)
-    joblib.dump(encoders, 'models/encoders.pkl')
+    os.makedirs(MODELS_DIR, exist_ok=True)
+    joblib.dump(encoders, os.path.join(MODELS_DIR, 'encoders.pkl'))
     
     # Save feature names
-    joblib.dump(X.columns.tolist(), 'models/feature_names.pkl')
+    joblib.dump(X.columns.tolist(), os.path.join(MODELS_DIR, 'feature_names.pkl'))
     
     print("Data loaded and preprocessed.")
     return train_test_split(X, y, test_size=0.2, random_state=42)
