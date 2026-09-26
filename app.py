@@ -11,15 +11,19 @@ from src.llm_utils import get_openai_explanation, get_gemini_explanation, genera
 from sklearn.model_selection import validation_curve
 from sklearn.ensemble import RandomForestClassifier
 
-# Load Encoders to display readable options
-ENCODERS_PATH = 'models/encoders.pkl'
-encoders = joblib.load(ENCODERS_PATH)
-
+import os
 import seaborn as sns
 import json
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODELS_DIR = os.path.join(BASE_DIR, 'models')
+
+# Load Encoders to display readable options
+ENCODERS_PATH = os.path.join(MODELS_DIR, 'encoders.pkl')
+encoders = joblib.load(ENCODERS_PATH)
+
 # Load Metrics
-METRICS_PATH = 'models/metrics.json'
+METRICS_PATH = os.path.join(MODELS_DIR, 'metrics.json')
 try:
     with open(METRICS_PATH, 'r') as f:
         metrics = json.load(f)
